@@ -23,7 +23,6 @@ export const PersonSlice = createSlice({
       state.phoneNo = action.payload.phoneNo;
     },
     removeUser: state => {
-      // state = initialState;
       state.email = "";
       state.name = "";
       state.phoneNo = "";
