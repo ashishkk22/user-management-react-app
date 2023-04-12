@@ -24,3 +24,7 @@ select {
   padding: 0;
   margin: 0;
 }
+input[type="file"] {
+  position: absolute;
+  left: -9999px;
+}

@@ -1,11 +1,12 @@
 import React from "react";
-import Register from "./Register";
+import RegisterForm from "./RegisterForm";
+import LoginForm from "./LoginForm";
 
-const Home = () => {
+const Login = () => {
   return (
     <div className="flex flex-col sm:flex-row">
       <div className="w-full sm:w-1/2 ">
-        <Register />
+        <LoginForm />
       </div>
       <div className="w-full sm:w-1/2 flex justify-center items-center">
         <img
@@ -18,4 +19,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Login;
