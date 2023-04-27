@@ -1,4 +1,5 @@
 import {
+  Navigate,
   Route,
   RouterProvider,
   createBrowserRouter,
@@ -6,8 +7,10 @@ import {
 } from "react-router-dom";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import Dashboard from "./components/Dashboard";
-import Register from "./components/Register";
-import Login from "./components/Login";
+import { Toaster } from "react-hot-toast";
+import LayoutAuth from "./components/LayoutAuth";
+import LoginForm from "./components/inputForms/LoginForm";
+import RegisterForm from "./components/inputForms/RegisterForm";
 
 function App() {
   const router = createBrowserRouter(
@@ -16,14 +19,28 @@ function App() {
         <Route path="/" element={<PrivateRoutes />}>
           <Route element={<Dashboard />} index />
         </Route>
-        <Route element={<Register />} path="/register" />
-        <Route element={<Login />} path="/login" />
+        <Route
+          element={
+            <LayoutAuth>
+              <RegisterForm />
+            </LayoutAuth>
+          }
+          path="/register"
+        />
+        <Route
+          element={
+            <LayoutAuth>
+              <LoginForm />
+            </LayoutAuth>
+          }
+          path="/login"
+        />
       </>
     )
   );
   return (
     <>
-      {/* <Home /> */}
+      <Toaster position="top-right" />
       <RouterProvider router={router} />
     </>
   );

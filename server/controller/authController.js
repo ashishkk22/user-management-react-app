@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 //signup user
 module.exports.userSignUp = async (req, res) => {
-  let { name, email: emailRaw, password, phone } = req.body;
+  let { name, email: emailRaw, password, phone, img } = req.body;
   let email = emailRaw.toLowerCase();
   try {
     if (!name || !email || !password || !phone) {
@@ -24,6 +24,7 @@ module.exports.userSignUp = async (req, res) => {
       email,
       phoneNo: phone,
       password: hashedPassword,
+      img,
     });
     const token = jwt.sign({ id: registeredUser._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRE,
@@ -129,6 +130,20 @@ module.exports.isAuthenticated = async function isAuthenticated(req, res) {
   } catch (err) {
     return res.status(400).json({
       message: "Please login to continue",
+    });
+  }
+};
+
+//logout user
+module.exports.userLogout = async function userLogout(req, res) {
+  try {
+    res.clearCookie("TOKEN");
+    return res.status(200).json({
+      message: "User logged out successfully",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Internal server error",
     });
   }
 };

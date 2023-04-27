@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema(
       default: false,
       required: true,
     },
+    img: {
+      type: String,
+      default: "https://ik.imagekit.io/ashishkk22/test-upload_u66yh4ONsg.png",
+    },
   },
   { timestamps: true }
 );

@@ -7,6 +7,14 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const authRouter = require("./routers/authRouter");
+const ImageKit = require("imagekit");
+
+const imagekit = new ImageKit({
+  urlEndpoint: "https://ik.imagekit.io/ashishkk22",
+  publicKey: "public_5FdaYDsMGNdK/tpS2xUahusRz4o=",
+  privateKey: "private_eTt1KHBzZo0r4C2QPY9ByT2oGgk=",
+});
+
 require("dotenv").config();
 
 const corsOptions = {
@@ -37,6 +45,11 @@ const PORT = process.env.PORT || 5000;
 
 server.listen(PORT, () => {
   console.log("Listening on port `" + PORT + "`");
+});
+
+app.get("/auth", function (req, res) {
+  var result = imagekit.getAuthenticationParameters();
+  res.send(result);
 });
 
 app.use("/user", authRouter);

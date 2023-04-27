@@ -1,25 +1,17 @@
 import React, { FormEvent } from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
-import { useLoginUserMutation } from "../api/user/userApi";
+import { useLoginUserMutation } from "../../api/user/userApi";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../store/store";
-import { setUser } from "../store/features/userSlice";
-import { addAuth } from "../store/features/authSlice";
+import { useAppDispatch } from "../../store/store";
+import { setUser } from "../../store/features/userSlice";
+import { addAuth } from "../../store/features/authSlice";
+import { toast } from "react-hot-toast";
+import { SignInSchema } from "../../validations/SignInSchema";
 
 type FormValues = {
   email: string;
   password: string;
 };
-
-const SignupSchema = Yup.object().shape({
-  email: Yup.string()
-    .email("Invalid email address")
-    .required("Email address is required !"),
-  password: Yup.string()
-    .min(6, "Must be at least 6 characters")
-    .required("Password is required !"),
-});
 
 const LoginForm = () => {
   const [loginUser] = useLoginUserMutation();
@@ -36,8 +28,8 @@ const LoginForm = () => {
       dispatch(setUser({ ...userData.user }));
       dispatch(addAuth());
       navigate("/");
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      toast.error(err.data.message);
     }
   }
 
@@ -46,12 +38,12 @@ const LoginForm = () => {
       email: "",
       password: "",
     },
-    validationSchema: SignupSchema,
+    validationSchema: SignInSchema,
     onSubmit,
   });
 
   return (
-    <div className="flex flex-col justify-center  items-center min-h-screen">
+    <div className="flex flex-col items-center justify-center min-h-screen">
       <form
         onSubmit={formik.handleSubmit}
         onReset={() => formik.resetForm()}
@@ -60,20 +52,17 @@ const LoginForm = () => {
         <h1 className="self-start mb-6 text-5xl font-semibold">Login</h1>
         <div className="mb-4">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block mb-2 text-sm font-bold text-gray-700"
             htmlFor="email"
           >
             Email
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-antiquewhite"
+            className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline bg-antiquewhite"
             type="text"
             id="email"
             placeholder="Enter the email id"
-            name="email"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.email}
+            {...formik.getFieldProps("email")}
           />
           {formik.errors.email && formik.touched.email ? (
             <div>{formik.errors.email}</div>
@@ -81,29 +70,26 @@ const LoginForm = () => {
         </div>
         <div className="mb-4">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block mb-2 text-sm font-bold text-gray-700"
             htmlFor="password"
           >
             Password
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-antiquewhite"
+            className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline bg-antiquewhite"
             id="password"
             type="password"
-            name="password"
             placeholder="Enter the password"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.password}
+            {...formik.getFieldProps("password")}
           />
           {formik.errors.password && formik.touched.password ? (
             <div>{formik.errors.password}</div>
           ) : null}
         </div>
-        <button type="submit" className="rounded p-2 bg-sky-600	 m-2 text-white">
+        <button type="submit" className="p-2 m-2 text-white rounded bg-sky-600">
           Submit
         </button>
-        <button type="reset" className="rounded p-2 bg-red-600 m-2 text-white">
+        <button type="reset" className="p-2 m-2 text-white bg-red-600 rounded">
           Reset
         </button>
       </form>
