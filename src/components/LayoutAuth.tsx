@@ -6,7 +6,7 @@ const LayoutAuth: React.FC<LayoutAuthProps> = ({ children }) => {
   return (
     <div className="flex flex-col sm:flex-row">
       <div className="w-full sm:w-1/2 ">{children}</div>
-      <div className="flex items-center justify-center w-full sm:w-1/2">
+      <div className="hidden items-center justify-center w-full sm:w-1/2 sm:flex">
         <img
           src="/assets/signup-banner.png"
           alt="sign-up banner"
