@@ -8,14 +8,13 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const authRouter = require("./routers/authRouter");
 const ImageKit = require("imagekit");
+require("dotenv").config();
 
 const imagekit = new ImageKit({
-  urlEndpoint: "https://ik.imagekit.io/ashishkk22",
-  publicKey: "public_5FdaYDsMGNdK/tpS2xUahusRz4o=",
-  privateKey: "private_eTt1KHBzZo0r4C2QPY9ByT2oGgk=",
+  urlEndpoint: process.env.IMAGE_KIT_URL,
+  publicKey: process.env.IMAGE_KIT_PUBLIC_KEY,
+  privateKey: process.env.IMAGE_KIT_PRIVATE_KEY,
 });
-
-require("dotenv").config();
 
 const corsOptions = {
   origin: process.env.CLIENT_LINK,

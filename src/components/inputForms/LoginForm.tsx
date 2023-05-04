@@ -24,7 +24,7 @@ const LoginForm = () => {
         email: values.email,
         password: values.password,
       }).unwrap();
-      console.log(userData);
+
       dispatch(setUser({ ...userData.user }));
       dispatch(addAuth());
       navigate("/");

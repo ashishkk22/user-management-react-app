@@ -44,14 +44,13 @@ const RegisterForm = () => {
   });
 
   const onError = (err: any) => {
-    console.log(err);
     setLoading(false);
     toast.success("an error occurred while uploading an image.");
   };
   const onSuccess = (res: UploadResponse) => {
     setLoading(false);
     toast.success("image uploaded successfully");
-    console.log(res);
+
     setSrc(res.url);
   };
 
@@ -72,7 +71,7 @@ const RegisterForm = () => {
         phone: values.phone,
         img: src,
       }).unwrap();
-      console.log(userData);
+
       dispatch(setUser({ ...userData.user }));
       dispatch(addAuth());
       navigate("/");
