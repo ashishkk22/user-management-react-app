@@ -35,7 +35,16 @@ export const userApi = createApi({
   }),
   tagTypes: ["user"],
   endpoints: builder => ({
-    signupUser: builder.mutation({
+    signupUser: builder.mutation<
+      Response,
+      {
+        email: string;
+        name: string;
+        password: string;
+        phone: string;
+        img: string;
+      }
+    >({
       query: (body: {
         email: string;
         name: string;
@@ -50,7 +59,7 @@ export const userApi = createApi({
         };
       },
     }),
-    loginUser: builder.mutation({
+    loginUser: builder.mutation<Response, { email: string; password: string }>({
       query: (body: { email: string; password: string }) => {
         return {
           url: "user/signin",
