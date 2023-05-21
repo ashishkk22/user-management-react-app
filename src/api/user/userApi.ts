@@ -1,31 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-type User = {
-  img: string;
-  _id: string;
-  name: string;
-  email: string;
-  phoneNo: string;
-  role: string;
-  activated: boolean;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-};
-
-type Response = {
-  message: string;
-  user: User;
-};
-
-const environment = import.meta.env;
+import { baseUrl } from "../../config";
+import { userResponse } from "../../types/userResponse.types";
 
 export const USER_API_REDUCER_KEY = "userApi";
 
 export const userApi = createApi({
   reducerPath: USER_API_REDUCER_KEY,
   baseQuery: fetchBaseQuery({
-    baseUrl: environment.VITE_APP_BASE_URL,
+    baseUrl: baseUrl,
     credentials: "include",
     prepareHeaders: headers => {
       headers.set("Content-type", "application/json");
@@ -36,7 +18,7 @@ export const userApi = createApi({
   tagTypes: ["user"],
   endpoints: builder => ({
     signupUser: builder.mutation<
-      Response,
+      userResponse,
       {
         email: string;
         name: string;
@@ -59,7 +41,10 @@ export const userApi = createApi({
         };
       },
     }),
-    loginUser: builder.mutation<Response, { email: string; password: string }>({
+    loginUser: builder.mutation<
+      userResponse,
+      { email: string; password: string }
+    >({
       query: (body: { email: string; password: string }) => {
         return {
           url: "user/signin",
@@ -68,7 +53,7 @@ export const userApi = createApi({
         };
       },
     }),
-    auth: builder.mutation<Response, void>({
+    auth: builder.mutation<userResponse, void>({
       query: () => {
         return {
           url: "user/isAuth",
@@ -76,7 +61,7 @@ export const userApi = createApi({
         };
       },
     }),
-    logout: builder.mutation<Response, void>({
+    logout: builder.mutation<userResponse, void>({
       query: () => {
         return {
           url: "user/logout",

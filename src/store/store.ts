@@ -1,9 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import type { TypedUseSelectorHook } from "react-redux";
-import userReducer from "./features/userSlice";
-import { userApi } from "../api/user/userApi";
-import authReducer from "./features/authSlice";
 import {
   persistStore,
   persistReducer,
@@ -16,6 +13,9 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage/session";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
+import userReducer from "./features/userSlice";
+import { userApi } from "../api/user/userApi";
+import authReducer from "./features/authSlice";
 
 const environment = import.meta.env;
 

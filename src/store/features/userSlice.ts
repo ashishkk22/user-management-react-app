@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { userApi } from "../../api/user/userApi";
 
 type UserInfo = {
   name: string;
@@ -18,21 +19,43 @@ const initialState: UserInfo = {
 export const PersonSlice = createSlice({
   name: "user",
   initialState: initialState,
-  reducers: {
-    setUser: (state, action: PayloadAction<UserInfo>) => {
-      state.name = action.payload.name;
-      state.email = action.payload.email;
-      state.phoneNo = action.payload.phoneNo;
-      state.img = action.payload.img;
-    },
-    removeUser: state => {
-      state.email = "";
-      state.name = "";
-      state.phoneNo = "";
-      state.img = "";
-    },
+  reducers: {},
+  extraReducers: builder => {
+    builder
+      .addMatcher(
+        userApi.endpoints.signupUser.matchFulfilled,
+        (state, { payload }) => {
+          state.name = payload.user.name;
+          state.email = payload.user.email;
+          state.phoneNo = payload.user.phoneNo;
+          state.img = payload.user.img;
+        }
+      )
+      .addMatcher(
+        userApi.endpoints.loginUser.matchFulfilled,
+        (state, { payload }) => {
+          state.name = payload.user.name;
+          state.email = payload.user.email;
+          state.phoneNo = payload.user.phoneNo;
+          state.img = payload.user.img;
+        }
+      )
+      .addMatcher(
+        userApi.endpoints.auth.matchFulfilled,
+        (state, { payload }) => {
+          state.name = payload.user.name;
+          state.email = payload.user.email;
+          state.phoneNo = payload.user.phoneNo;
+          state.img = payload.user.img;
+        }
+      )
+      .addMatcher(userApi.endpoints.logout.matchFulfilled, state => {
+        state.name = "";
+        state.email = "";
+        state.phoneNo = "";
+        state.img = "";
+      });
   },
 });
 
 export default PersonSlice.reducer;
-export const { setUser, removeUser } = PersonSlice.actions;

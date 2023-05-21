@@ -1,18 +1,13 @@
 import { toast } from "react-hot-toast";
 import { useLogoutMutation } from "../api/user/userApi";
-import { removeAuth } from "../store/features/authSlice";
-import { removeUser } from "../store/features/userSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 
 const Dashboard = () => {
-  const dispatch = useAppDispatch();
   const { email, name, phoneNo, img } = useAppSelector(state => state.user);
   const [logout] = useLogoutMutation();
   async function logoutHandler() {
     try {
       await logout();
-      dispatch(removeUser());
-      dispatch(removeAuth());
     } catch (err) {
       toast.error("internal server error");
     }

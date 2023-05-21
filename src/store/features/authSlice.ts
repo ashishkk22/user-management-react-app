@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { userApi } from "../../api/user/userApi";
 
 type Auth = {
   isAuth: boolean;
@@ -12,15 +13,22 @@ const initialState: Auth = {
 export const AuthSlice = createSlice({
   name: "auth",
   initialState: initialState,
-  reducers: {
-    addAuth: state => {
-      state.isAuth = true;
-    },
-    removeAuth: state => {
-      state.isAuth = false;
-    },
+  reducers: {},
+  extraReducers: builder => {
+    builder
+      .addMatcher(userApi.endpoints.auth.matchFulfilled, state => {
+        state.isAuth = true;
+      })
+      .addMatcher(userApi.endpoints.loginUser.matchFulfilled, state => {
+        state.isAuth = true;
+      })
+      .addMatcher(userApi.endpoints.signupUser.matchFulfilled, state => {
+        state.isAuth = true;
+      })
+      .addMatcher(userApi.endpoints.logout.matchFulfilled, state => {
+        state.isAuth = false;
+      });
   },
 });
 
 export default AuthSlice.reducer;
-export const { addAuth, removeAuth } = AuthSlice.actions;

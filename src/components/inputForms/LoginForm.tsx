@@ -1,12 +1,9 @@
-import React, { FormEvent } from "react";
 import { useFormik } from "formik";
-import { useLoginUserMutation } from "../../api/user/userApi";
-import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../store/store";
-import { setUser } from "../../store/features/userSlice";
-import { addAuth } from "../../store/features/authSlice";
 import { toast } from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
+import { useLoginUserMutation } from "../../api/user/userApi";
 import { SignInSchema } from "../../validations/SignInSchema";
+import InputField from "./InputField";
 
 type FormValues = {
   email: string;
@@ -15,23 +12,7 @@ type FormValues = {
 
 const LoginForm = () => {
   const [loginUser] = useLoginUserMutation();
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  async function onSubmit(values: FormValues) {
-    try {
-      const userData = await loginUser({
-        email: values.email,
-        password: values.password,
-      }).unwrap();
-
-      dispatch(setUser({ ...userData.user }));
-      dispatch(addAuth());
-      navigate("/");
-    } catch (err: any) {
-      toast.error(err.data.message);
-    }
-  }
 
   const formik = useFormik<FormValues>({
     initialValues: {
@@ -42,6 +23,18 @@ const LoginForm = () => {
     onSubmit,
   });
 
+  async function onSubmit(values: FormValues) {
+    try {
+      await loginUser({
+        email: values.email,
+        password: values.password,
+      }).unwrap();
+      navigate("/");
+    } catch (err: any) {
+      toast.error(err.data.message);
+    }
+  }
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <form
@@ -50,42 +43,31 @@ const LoginForm = () => {
         className="w-10/12"
       >
         <h1 className="self-start mb-6 text-5xl font-semibold">Login</h1>
-        <div className="mb-4">
-          <label
-            className="block mb-2 text-sm font-bold text-gray-700"
-            htmlFor="email"
-          >
-            Email
-          </label>
-          <input
-            className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline bg-antiquewhite"
-            type="text"
-            id="email"
-            placeholder="Enter the email id"
-            {...formik.getFieldProps("email")}
-          />
-          {formik.errors.email && formik.touched.email ? (
-            <div>{formik.errors.email}</div>
-          ) : null}
-        </div>
-        <div className="mb-4">
-          <label
-            className="block mb-2 text-sm font-bold text-gray-700"
-            htmlFor="password"
-          >
-            Password
-          </label>
-          <input
-            className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline bg-antiquewhite"
-            id="password"
-            type="password"
-            placeholder="Enter the password"
-            {...formik.getFieldProps("password")}
-          />
-          {formik.errors.password && formik.touched.password ? (
-            <div>{formik.errors.password}</div>
-          ) : null}
-        </div>
+        <InputField
+          LabelTitle="Email"
+          type="text"
+          id="email"
+          placeholder="Enter the email id"
+          {...formik.getFieldProps("email")}
+          error={
+            formik.errors.email && formik.touched.email
+              ? formik.errors.email
+              : ""
+          }
+        />
+        <InputField
+          LabelTitle="Password"
+          id="password"
+          type="password"
+          autoComplete="on"
+          placeholder="Enter the password"
+          {...formik.getFieldProps("password")}
+          error={
+            formik.errors.password && formik.touched.password
+              ? formik.errors.password
+              : ""
+          }
+        />
         <button type="submit" className="p-2 m-2 text-white rounded bg-sky-600">
           Submit
         </button>
@@ -95,7 +77,7 @@ const LoginForm = () => {
       </form>
       <div>
         Don't have an account ?{" "}
-        <Link to="/register" className="text-sky-600">
+        <Link to="/auth/register" className="text-sky-600">
           Register
         </Link>
       </div>
